@@ -1,0 +1,99 @@
+# Install Eclipse Temurin JDK locally under $HOME/.local (no root required)
+# Usage: make java        - install Java
+#        make clean-java  - remove installed Java
+#        make info        - show info (default)
+
+JAVA_VERSION := 21
+
+INSTALLDIR := $(HOME)/.local
+JVM_DIR    := $(INSTALLDIR)/lib/jvm
+BIN_DIR    := $(INSTALLDIR)/bin
+
+# ---------- detect OS and architecture ----------
+_OS   := $(shell uname -s)
+_ARCH := $(shell uname -m)
+
+ifeq ($(_OS),Darwin)
+  OS_NAME := mac
+else
+  OS_NAME := linux
+endif
+
+ifeq ($(_ARCH),arm64)
+  ARCH := aarch64
+else ifeq ($(_ARCH),aarch64)
+  ARCH := aarch64
+else
+  ARCH := x64
+endif
+
+# Eclipse Temurin API – always resolves to latest GA for the given version
+ADOPTIUM_URL := https://api.adoptium.net/v3/binary/latest/$(JAVA_VERSION)/ga/$(OS_NAME)/$(ARCH)/jdk/hotspot/normal/eclipse
+TARBALL      := $(JVM_DIR)/temurin-$(JAVA_VERSION)-$(OS_NAME)-$(ARCH).tar.gz
+
+# On macOS the JDK is inside Contents/Home/; on Linux it is at the top level
+ifeq ($(OS_NAME),mac)
+  JAVA_BIN_GLOB := $(JVM_DIR)/jdk-*/Contents/Home/bin/java
+else
+  JAVA_BIN_GLOB := $(JVM_DIR)/jdk-*/bin/java
+endif
+
+# ------------------------------------------------
+
+.PHONY: all info help java clean-java distclean-java
+
+all: info
+
+## Download and install Java $(JAVA_VERSION) under $(INSTALLDIR)
+java: $(BIN_DIR)/java
+	@echo ""
+	@echo "Java ready: $$($(BIN_DIR)/java -version 2>&1 | head -1)"
+	@echo "Symlink   : $(BIN_DIR)/java"
+	@echo ""
+	@echo "Make sure $(BIN_DIR) is in your PATH:"
+	@echo "  export PATH=\"$(BIN_DIR):\$$PATH\""
+
+$(BIN_DIR)/java: $(JVM_DIR)/.installed
+	$(eval JAVA_BIN := $(shell ls $(JAVA_BIN_GLOB) 2>/dev/null | head -1))
+	@if [ -z "$(JAVA_BIN)" ]; then echo "ERROR: could not find java binary under $(JVM_DIR)"; exit 1; fi
+	@mkdir -p $(BIN_DIR)
+	ln -sf "$(JAVA_BIN)" $(BIN_DIR)/java
+	ln -sf "$(dir $(JAVA_BIN))javac" $(BIN_DIR)/javac
+	@echo "Linked $(BIN_DIR)/java -> $(JAVA_BIN)"
+
+$(JVM_DIR)/.installed: $(TARBALL)
+	@echo "Extracting JDK..."
+	tar -xzf $(TARBALL) -C $(JVM_DIR)
+	@touch $@
+	@echo "Extraction complete."
+
+$(TARBALL):
+	@echo "Downloading Eclipse Temurin JDK $(JAVA_VERSION) for $(OS_NAME)/$(ARCH)..."
+	@mkdir -p $(JVM_DIR)
+	curl -fL --progress-bar -o $@ "$(ADOPTIUM_URL)"
+
+## Remove installed Java (keeps tarball for re-install speed)
+clean-java:
+	rm -f $(BIN_DIR)/java $(BIN_DIR)/javac
+	rm -rf $(JVM_DIR)/jdk-* $(JVM_DIR)/.installed
+	@echo "Java removed. Tarball kept at $(JVM_DIR)/."
+
+## Remove everything including the downloaded tarball
+distclean-java: clean-java
+	rm -f $(TARBALL)
+
+info:
+	@echo "make java       install Eclipse Temurin JDK $(JAVA_VERSION) to $(INSTALLDIR)"
+
+help:
+	@echo ""
+	@echo "Targets:"
+	@echo "  java           download and install Java $(JAVA_VERSION) LTS (Eclipse Temurin)"
+	@echo "  clean-java     remove installed JDK (keeps tarball)"
+	@echo "  distclean-java remove installed JDK and tarball"
+	@echo ""
+	@echo "Detected platform : $(_OS) / $(_ARCH)"
+	@echo "Adoptium target   : $(OS_NAME) / $(ARCH)"
+	@echo "Install prefix    : $(INSTALLDIR)"
+	@echo "Download URL      : $(ADOPTIUM_URL)"
+	@echo ""

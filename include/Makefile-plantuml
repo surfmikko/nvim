@@ -1,0 +1,16 @@
+INSTALLDIR   = $(HOME)/.local
+DATADIR      = $(HOME)/.local/share/nvim
+PLANTUML_JAR = $(DATADIR)/opt/plantuml/plantuml.jar
+PLANTUML_URL = https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+
+.PHONY: info plantuml
+
+info:
+	@echo "make plantuml   install latest PlantUML to $(INSTALLDIR)"
+
+plantuml:
+	mkdir -p $(dir $(PLANTUML_JAR)) $(INSTALLDIR)/bin
+	curl -fsSL -o $(PLANTUML_JAR) $(PLANTUML_URL)
+	printf '#!/bin/sh\nexec java -jar %s "$$@"\n' $(PLANTUML_JAR) \
+		> $(INSTALLDIR)/bin/plantuml
+	chmod +x $(INSTALLDIR)/bin/plantuml

@@ -1,0 +1,93 @@
+*cheatsheet*             Nvim Quick Reference
+
+LSP NAVIGATION                                                    *cheat-lsp-nav*
+
+K                      Toggle hover documentation split
+<Leader>e              Toggle diagnostics split
+
+gd                     Go to definition
+gD                     Go to declaration
+gr                     List references
+gi                     Go to implementation
+
+<C-o> / <C-i>          Jump back/orward in jump stack
+
+LSP ACTIONS                                                       *cheat-lsp-act*
+
+<Leader>rn             Rename symbol
+<Leader>ca             Code action
+<Leader>f              Format buffer
+
+GIT                                                                   *cheat-git*
+
+<Leader>gg             Toggle Git status window
+<Leader>gw,gc          Stage, Commit
+<Leader>gd,gb,gl       Diff, Blame, Log
+<Leader>gr             Checkout file (Gread)
+
+GIT STATUS WINDOW                                              *cheat-git-status*
+
+s / u                  Stage / unstage file or hunk
+=                      Toggle inline diff
+dd / dv                Diff in horizontal / vertical split
+cc                     Commit staged
+ca                     Amend last commit
+X                      Discard change
+o / O                  Open file / open in new tab
+<CR>                   Open file and close status window
+q                      Close status window
+g?                     Show all fugitive keymaps
+
+NAVIGATION                                                     *cheat-navigation*
+
+<CR>, <C-H>            Follow tag / jump back (help files)
+
+<C-p>                  CtrlP fuzzy file search
+<C-j>, <C-k>           Scroll filelist
+
+<C-j>, <C-k>           Next/prev location list item
+<C-l>, <C-h>           Next/prev quickfix item
+<Leader>q, <Leader>l   Toggle quickfix, location list
+
+NAVIGATION                                                *cheat-navigation-tabs*
+
+th, tl                 First/last tab
+tj, tk                 Next/prev tab
+tt, td                 Open/close tab
+
+<CR>                   Clear search highlight
+
+EDITING                                                           *cheat-editing*
+
+<Leader>w              Save file
+<Leader>y, <Leader>d   Copy/cut to system clipboard (visual)
+<Leader>p, <Leader>P   Paste from system clipboard
+<Leader>cc             Toggle comment (line or selection)
+
+SNIPPETS                                                         *cheat-snippets*
+
+<Tab>                  Expand snippet / jump to next placeholder
+<S-Tab>                Jump to previous placeholder
+<CR>                   Jump forward in snippet / newline
+
+FOLDS                                                               *cheat-folds*
+
+:set fdm=              manual, indent, expr, marker, syntax, diff
+zM                     Close all folds
+zR                     Open all folds
+za                     Toggle fold
+zo / zO                Open one/all fold(s) under cursor
+zc / zC                Close one/all fold(s) under cursor
+zm                     Fold more
+zr                     Fold less
+
+COMMANDS                                                         *cheat-commands*
+
+:Bootstrap             Reload config and sync plugins
+:LspInstall            Install all LSP servers
+:LspStart / :LspStop   Start/stop LSP servers
+:LspDebug              LSP status overview
+:PlantumlOpen          Open PlantUML live preview
+:PlantumlUpdate        Download latest plantuml.jar
+:Ggr <pattern>         Git grep to quickfix list
+

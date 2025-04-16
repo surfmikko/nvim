@@ -1,0 +1,12 @@
+INSTALLDIR = $(HOME)/.local
+ARCH       = $(shell uname -m)
+NVIM_URL   = https://github.com/neovim/neovim/releases/latest/download/nvim-macos-$(ARCH).tar.gz
+
+.PHONY: info nvim
+
+info:
+	@echo "make nvim       install latest Nvim to $(INSTALLDIR)"
+
+nvim:
+	mkdir -p $(INSTALLDIR)
+	curl -fsSL $(NVIM_URL) | tar -xzf - -C $(INSTALLDIR) --strip-components=1
