@@ -1,14 +1,12 @@
 INSTALLDIR = $(HOME)/.local
-DATADIR    = $(HOME)/.local/share/nvim
-STARTLOG   = $(DATADIR)/startup.log
+CONFDIR    = $(HOME)/.config
 SHELLRC    = $(shell echo $$SHELL | grep -q zsh && echo $(HOME)/.zshrc || echo $(HOME)/.bashrc)
 
 define SHELL_CONFIG
 # nvim-make-shell-start
-export EDITOR=nvim
-alias vi=nvim
-alias vimark='nvim --startuptime $(STARTLOG) -c edit $(STARTLOG)'
 export PATH=$(INSTALLDIR)/bin:$$PATH
+export NVIMDIR=$(CONFDIR)/nvim
+[ -f "$$NVIMDIR/aliases" ] && source "$$NVIMDIR/aliases"
 # nvim-make-shell-end
 endef
 export SHELL_CONFIG
@@ -19,7 +17,6 @@ info:
 	@echo "make shell      add configuration to zshrc/bashrc file ($(SHELLRC))"
 
 shell:
-	touch "$(SHELLRC)"
 	awk '/# nvim-make-shell-start/{p=1} !p{print} /# nvim-make-shell-end/{p=0}' \
 		"$(SHELLRC)" > "$(SHELLRC).tmp"
 	echo "$$SHELL_CONFIG" >> "$(SHELLRC).tmp"
