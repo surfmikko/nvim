@@ -88,9 +88,16 @@ local function lsp_stop()
     end
 end
 
+local function lsp_clean()
+    local path = vim.fn.stdpath('data') .. '/lsp'
+    vim.fn.delete(path, 'rf')
+    print('[lsp] removed ' .. path)
+end
+
 local function setup_commands()
     local cmd = vim.api.nvim_create_user_command
     cmd('LspInstall', lsp_install, { desc = 'Install LSP servers' })
+    cmd('LspClean',   lsp_clean,   { desc = 'Remove all LSP servers' })
     cmd('LspStart',   lsp_start,   { desc = 'Start LSP servers' })
     cmd('LspStop',    lsp_stop,    { desc = 'Stop LSP servers' })
 end
@@ -200,8 +207,19 @@ end
 
 -- Initialisation
 
+local function auto_install(servers)
+    for _, name in ipairs(servers) do
+        local cfg = server_config(name)
+        if cfg and cfg.install and vim.fn.executable(cfg.cmd[1]) == 0 then
+            print('[lsp] installing ' .. name .. '...')
+            cfg.install()
+        end
+    end
+end
+
 function lspconfig:init(servers)
     self._servers = servers
+    vim.schedule(function() auto_install(servers) end)
     vim.lsp.enable(servers)
 
     local augroup = vim.api.nvim_create_augroup('lspconfig', { clear = true })

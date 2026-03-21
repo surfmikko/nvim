@@ -23,7 +23,7 @@ return {
         require('luasnip.loaders.from_snipmate').lazy_load({
             paths = {
                 vim.fn.stdpath('config') .. '/snippets',
-                data .. '/site/pack/paqs/start/vim-snippets/snippets',
+                data .. '/site/pack/plugins/start/vim-snippets/snippets',
             }
         })
 

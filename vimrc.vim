@@ -10,6 +10,8 @@ set bg=dark
 set showcmd
 set modelines=1
 set cmdheight=1
+" fix flashing XTGETTCAP sequence 
+set notermguicolors
 
 " Disable mouse (prevents terminal from losing click handling)
 set mouse=

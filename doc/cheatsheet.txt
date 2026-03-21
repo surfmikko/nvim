@@ -101,7 +101,8 @@ q / <Esc>              Close pytest preview tab, go to error tab
 
 COMMANDS                                                         *cheat-commands*
 
-:Bootstrap             Reload config and sync plugins
+:Bootstrap             Install/update all plugins
+:Bootclean             Remove all plugins (re-cloned on next start)
 :LspInstall            Install all LSP servers
 :LspStart / :LspStop   Start/stop LSP servers
 :LspDebug              LSP status overview

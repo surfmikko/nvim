@@ -17,13 +17,18 @@ alias vimark="nvim --startuptime $STARTLOG $STARTLOG"
 
 # Git
 
+gh() { grep -E '^(alias g|g[a-z]+\(\))' "$NVIMDIR/aliases" | sed 's/alias //' | sort; }
+
+alias gf='git fetch'
+alias go='git checkout'
+alias gob='git checkout -b'
+alias gp='git push'
 alias gs='git status'
 alias gsh='git show'
 alias gd='git diff'
 alias gdh='git diff HEAD'
 alias gl='git log'
 alias gg='git grep'
-alias gf='git fetch'
 alias gm='git merge --ff-only'
 gri() { git rebase -i "${1:-origin/$(git rev-parse --abbrev-ref HEAD)}"; }
 gca() {
@@ -64,7 +69,7 @@ gc() {
 venv_install() {
     python3 -m venv venv
     venv_activate
-    pip install --upgrade pip setuptools
+    python3 -m pip install --upgrade pip setuptools
     if ls requirements*.txt &>/dev/null; then
         for f in requirements*.txt; do pip install --upgrade -r "$f"; done
     else

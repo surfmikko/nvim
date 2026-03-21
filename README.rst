@@ -3,14 +3,18 @@ nvim
 
 Boring Neovim configuration, with less dependencies and good compatibility.
 
-- Automated plugin/LSP installation (paq, vim.lsp)
+- Automated plugin installation (git clone, no plugin manager)
+- Automated LSP server installation on startup
 - Python LSP server with dedicated venv (pylsp)
+- Pytest integration with quickfix and tab preview
 - Snippets (LuaSnip + vim-snippets)
 - Git integration (fugitive)
 - Fuzzy file search (CtrlP)
+- File tree (nvim-tree)
 - PlantUML live preview and goodies (plantuml-previewer, plantuml_keymap)
 - No-plugin configuration for Vim 8/9
 - Non-privileged tool installation (nvim, plantuml, java)
+- Shell aliases and shortcuts included (git, venv)
 
 Basic configuration works by cloning repository under ~/.config/nvim
 
@@ -37,13 +41,13 @@ Baseline configuration::
 
 Plugin configuration::
 
-  init.lua                Main configuration for Neoviim
-  lua/bootstrap.lua       Plugin manager (:Bootstrap)
+  init.lua                Main configuration for Neovim
+  lua/bootstrap.lua       Plugin manager (:Bootstrap, :Bootclean)
   lua/config/*.lua        Plugin configurations
 
 LSP server configuration::
 
-  lua/lspconfig.lua       LSP manager (:LsoInstall, :LspStart, :LspStop)
+  lua/lspconfig.lua       LSP manager (:LspInstall, :LspStart, :LspStop)
   lua/lspdebug.lua        LSP debug utility (:LspDebug)
   lsp/*.lua               LSP server configurations
 
@@ -62,10 +66,10 @@ Useful commands::
 
 Plugins / LSP::
 
-  :Bootstrap         reload config and sync plugins
-  :LspInstall        reload and install LSP servers
+  :Bootclean         remove all plugins (re-cloned on next start)
+  :LspInstall        install LSP servers
   :LspStart/Stop     start/stop LSP servers
-  :LspDebug          when it didn't work (disabled in init.lua)
+  :LspDebug          when it didn't work
 
 PlantUML::
 
@@ -87,6 +91,8 @@ Navigation::
   tj, tk             next, prev tab
   td, tt             close, open tab
 
+  <Leader>o, O       focus/switch, toggle nvim-tree
+
 Coding support::
 
   <Tab>, <C-n>       snippets and completion
@@ -103,6 +109,5 @@ Coding support::
   <Leader>gw, gc     stage, commit
   <Leader>gd, gb     diff, blame
 
-  <leader>uh,j,k,l   plantuml: change arrow directioni
+  <leader>uh,j,k,l   plantuml: change arrow direction
   <leader>un, ut     plantuml: wrap selection with node, together
-

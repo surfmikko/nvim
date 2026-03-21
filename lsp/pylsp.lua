@@ -1,4 +1,4 @@
-local opt = vim.fn.stdpath('data') .. '/opt/pylsp'
+local opt = vim.fn.stdpath('data') .. '/lsp/pylsp'
 
 local function install()
     if vim.fn.isdirectory(opt) == 0 then
