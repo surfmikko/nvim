@@ -14,6 +14,7 @@ require("bootstrap")({
     'config.plantuml_previewer',
     'config.plantuml_keymap',
     'config.simpylfold',
+    'config.nvim_tree',
 }, function()
     require("lspdebug")
     require("lspconfig")({ 'pylsp' })

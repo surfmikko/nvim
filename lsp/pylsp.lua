@@ -10,8 +10,20 @@ local function install()
     print('[pylsp] installed to ' .. opt)
 end
 
+local function before_init(_, config)
+    local root = config.root_dir or vim.fn.getcwd()
+    for _, name in ipairs({ '.venv', 'venv', 'env' }) do
+        local python = root .. '/' .. name .. '/bin/python'
+        if vim.fn.executable(python) == 1 then
+            config.settings.pylsp.plugins.jedi = { environment = python }
+            return
+        end
+    end
+end
+
 return {
     install      = install,
+    before_init  = before_init,
     cmd          = { opt .. '/bin/pylsp' },
     filetypes    = { 'python' },
     root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', '.git' },

@@ -10,7 +10,7 @@ gD                     Go to declaration
 gr                     List references
 gi                     Go to implementation
 
-<C-o> / <C-i>          Jump back/orward in jump stack
+<C-o> / <C-i>          Jump back/forward in jump stack
 
 LSP ACTIONS                                                       *cheat-lsp-act*
 
@@ -42,15 +42,26 @@ NAVIGATION                                                     *cheat-navigation
 
 <CR>, <C-H>            Follow tag / jump back (help files)
 
-<C-p>                  CtrlP fuzzy file search
+<Leader>p              CtrlP fuzzy file search
+<Leader>P              CtrlP clear cache and open
+<C-p>                  CtrlP fuzzy file search (backup)
 <C-j>, <C-k>           Scroll filelist
 
 <C-j>, <C-k>           Next/prev location list item
 <C-l>, <C-h>           Next/prev quickfix item
 <Leader>q, <Leader>l   Toggle quickfix, location list
 
-NAVIGATION                                                *cheat-navigation-tabs*
+FILE TREE                                                      *cheat-file-tree*
 
+<Leader>o              Focus/switch nvim-tree
+<Leader>O              Open/close nvim-tree
+h / l                  Close / open dir or file
+<Esc>                  Close nvim-tree
+
+TABS                                                          *cheat-navigation-tabs*
+
+<Leader>j, <Leader>k   Prev/next tab
+<Leader>J, <Leader>K   Close/open tab
 th, tl                 First/last tab
 tj, tk                 Next/prev tab
 tt, td                 Open/close tab
@@ -61,8 +72,8 @@ EDITING                                                           *cheat-editing
 
 <Leader>w              Save file
 <Leader>y, <Leader>d   Copy/cut to system clipboard (visual)
-<Leader>p, <Leader>P   Paste from system clipboard
 <Leader>cc             Toggle comment (line or selection)
+<Leader>h              Toggle cheatsheet
 
 SNIPPETS                                                         *cheat-snippets*
 
@@ -80,6 +91,13 @@ zo / zO                Open one/all fold(s) under cursor
 zc / zC                Close one/all fold(s) under cursor
 zm                     Fold more
 zr                     Fold less
+
+PYTEST                                                             *cheat-pytest*
+
+<Leader>t              Run pytest, open first error in new tab
+<Leader>T              Run pytest with color preview, open first error in new tab
+q / <Esc>              Close pytest preview tab, go to error tab
+<Leader>J              Close error/preview tab
 
 COMMANDS                                                         *cheat-commands*
 

@@ -45,6 +45,11 @@ nnoremap tt  :tabedit<space>
 nnoremap tm  :tabm<space>
 nnoremap td  :tabclose<CR>
 
+nnoremap <Leader>j :tabprev<CR>
+nnoremap <Leader>k :tabnext<CR>
+nnoremap <Leader>J :tabclose<CR>
+nnoremap <Leader>K :tabnew<CR>
+
 " Clear the search highlight with enter-key
 nnoremap <silent> <CR> :noh<CR><CR>
 
@@ -61,6 +66,12 @@ set statusline+=%=      "left/right separator
 set statusline+=%c,     "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
+
+" Open files readonly when swap file exists
+augroup swap_readonly
+    autocmd!
+    autocmd SwapExists * let v:swapchoice = 'o'
+augroup END
 
 " Detect Python files by filename
 au BufNewFile,BufRead *.py set filetype=python

@@ -42,6 +42,11 @@ vim.keymap.set('n', '<Leader>0', reload,
     { desc = 'reload config and sync plugins' })
 vim.api.nvim_create_user_command('Bootstrap', reload,
     { desc = 'reload config and sync plugins' })
+vim.api.nvim_create_user_command('Bootclean', function()
+    local path = vim.fn.stdpath('data') .. '/site/pack/paqs'
+    vim.fn.delete(path, 'rf')
+    print('[bootstrap] removed ' .. path)
+end, { desc = 'remove all installed plugins' })
 
 function bootstrap:clone()
     local path = vim.fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim'
