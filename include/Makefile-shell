@@ -17,6 +17,7 @@ info:
 	@echo "make shell      add configuration to zshrc/bashrc file ($(SHELLRC))"
 
 shell:
+	[ -f $(SHELLRC) ] || touch $(SHELLRC)
 	awk '/# nvim-make-shell-start/{p=1} !p{print} /# nvim-make-shell-end/{p=0}' \
 		"$(SHELLRC)" > "$(SHELLRC).tmp"
 	echo "$$SHELL_CONFIG" >> "$(SHELLRC).tmp"

@@ -20,6 +20,7 @@ alias vimark="nvim --startuptime $STARTLOG $STARTLOG"
 gh() { grep -E '^(alias g|g[a-z]+\(\))' "$NVIMDIR/aliases" | sed 's/alias //' | sort; }
 
 alias gf='git fetch'
+alias gff='git pull --ff-only'
 alias go='git checkout'
 alias gob='git checkout -b'
 alias gp='git push'
@@ -67,26 +68,26 @@ gc() {
 # Virtualenv
 
 venv_install() {
-    python3 -m venv venv
-    venv_activate
-    python3 -m pip install --upgrade pip setuptools
-    if ls requirements*.txt &>/dev/null; then
-        for f in requirements*.txt; do pip install --upgrade -r "$f"; done
-    else
-        pip install -e ".[dev,test]"
-    fi
+  python3 -m venv venv
+  venv_activate
+  python3 -m pip install --upgrade pip setuptools
+  if ls pyproject.toml &> /dev/null ; then
+    pip install -e ".[dev,test]"
+  else
+    find . -maxdepth 1 -name 'requirements.txt' -name 'requirements?dev.txt' -exec pip install --upgrade -r {} \;
+  fi
 }
 
 venv_delete() {
-    [ -f venv/bin/activate ] || return
-    rm -rf venv
+  [ -f venv/bin/activate ] || return
+  rm -rf venv
 }
 
 venv_activate() {
-    source venv/bin/activate
+  source venv/bin/activate
 }
 
 venv() {
-    [ -f venv/bin/activate ] || venv_install
-    venv_activate
+  [ -f venv/bin/activate ] || venv_install
+  venv_activate
 }
