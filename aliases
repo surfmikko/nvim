@@ -1,6 +1,9 @@
 # Dot
 
+# dottcd  cd to $NVIMDIR
 alias dottcd="cd $NVIMDIR"
+
+# dott    reload aliases, optionally run make target
 function dott() {
   local ret=0
   [ -n "$1" ] && { make -C "$NVIMDIR" "$1" ARGS="${*:2}"; ret=$?; }
@@ -8,41 +11,57 @@ function dott() {
   return $ret
 }
 
+# dh      print all alias help, optionally filter by keyword
+dh() {
+  local out
+  out=$(grep '^# ' "$NVIMDIR/aliases" | sed 's/^# //')
+  [ -n "$1" ] && out=$(printf '%s\n' "$out" | grep -i "$1")
+  printf '%s\n' "$out" | awk 'NR>1 && /^[A-Z]/{print ""} 1'
+}
+
+# gh      print git alias help, optionally filter by keyword
+gh() { dh "$@" | grep '^g'; }
+
 # Neovim
 
 STARTLOG="$HOME/.local/share/nvim/startup.log"
 export EDITOR=nvim
+
+# vi      open nvim
 alias vi=nvim
+# vimark  open nvim with startup time profiling
 alias vimark="nvim --startuptime $STARTLOG $STARTLOG"
 
 # Git
 
-gh() { grep -E '^(alias g|g[a-z]+\(\))' "$NVIMDIR/aliases" | sed 's/alias //' | sort; }
-
+# gf      git fetch
 alias gf='git fetch'
+# gff     git pull --ff-only
 alias gff='git pull --ff-only'
-alias go='git checkout'
-alias gob='git checkout -b'
+# gp      git push
 alias gp='git push'
-alias gs='git status'
-alias gsh='git show'
-alias gd='git diff'
-alias gdh='git diff HEAD'
-alias gl='git log'
-alias gg='git grep'
-alias gm='git merge --ff-only'
-gri() { git rebase -i "${1:-origin/$(git rev-parse --abbrev-ref HEAD)}"; }
-gca() {
-  PROJECT=$(git rev-parse --show-toplevel)
-  if [ -f "$PROJECT/.gitmessage" ]; then
-    git commit --amend -F "$PROJECT/.gitmessage" -e "$@"
-  else
-    git commit --amend "$@"
-  fi
-}
-gan() { git commit --amend --no-edit "$@"; }
-ga() { git add "${@:-.}"; }
 
+# go      git checkout
+alias go='git checkout'
+# gob     git checkout -b
+alias gob='git checkout -b'
+
+# gs      git status
+alias gs='git status'
+# gl      git log
+alias gl='git log'
+# gd      git diff
+alias gd='git diff'
+# gdh     git diff HEAD
+alias gdh='git diff HEAD'
+# gsh     git show
+alias gsh='git show'
+# gg      git grep
+alias gg='git grep'
+
+# gm      git merge --ff-only
+alias gm='git merge --ff-only'
+# gr      git rebase (default: origin/current branch)
 gr() {
   if [ -n "$1" ]; then
     git rebase "$@"
@@ -50,12 +69,17 @@ gr() {
     git rebase "origin/$(git rev-parse --abbrev-ref HEAD)"
   fi
 }
+# gri     git rebase interactive (default: origin/current branch)
+gri() { git rebase -i "${1:-origin/$(git rev-parse --abbrev-ref HEAD)}"; }
 
+# ga      git add (default: all)
+ga() { git add "${@:-.}"; }
+# gmsg    set .gitmessage commit message file
 gmsg() {
   PROJECT=$(git rev-parse --show-toplevel)
   printf '%s\n' "$*" > "$PROJECT/.gitmessage"
 }
-
+# gc      git commit (uses .gitmessage if present)
 gc() {
   PROJECT=$(git rev-parse --show-toplevel)
   if [ -f "$PROJECT/.gitmessage" ] ; then
@@ -64,8 +88,25 @@ gc() {
     git commit "$@"
   fi
 }
+# gca     git commit --amend (uses .gitmessage if present)
+gca() {
+  PROJECT=$(git rev-parse --show-toplevel)
+  if [ -f "$PROJECT/.gitmessage" ]; then
+    git commit --amend -F "$PROJECT/.gitmessage" -e "$@"
+  else
+    git commit --amend "$@"
+  fi
+}
+# gan     git commit --amend --no-edit
+gan() { git commit --amend --no-edit "$@"; }
 
 # Virtualenv
+
+# venv    activate or create virtualenv
+venv() {
+  [ -f venv/bin/activate ] || venv_install
+  venv_activate
+}
 
 venv_install() {
   python3 -m venv venv
@@ -74,7 +115,8 @@ venv_install() {
   if ls pyproject.toml &> /dev/null ; then
     pip install -e ".[dev,test]"
   else
-    find . -maxdepth 1 -name 'requirements.txt' -name 'requirements?dev.txt' -exec pip install --upgrade -r {} \;
+    find . -maxdepth 1 -name 'requirements.txt' \
+      -name 'requirements?dev.txt' -exec pip install --upgrade -r {} \;
   fi
 }
 
@@ -85,9 +127,4 @@ venv_delete() {
 
 venv_activate() {
   source venv/bin/activate
-}
-
-venv() {
-  [ -f venv/bin/activate ] || venv_install
-  venv_activate
 }
