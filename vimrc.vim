@@ -52,6 +52,16 @@ nnoremap <Leader>k :tabnext<CR>
 nnoremap <Leader>J :tabclose<CR>
 nnoremap <Leader>K :tabnew<CR>
 
+" Copy/paste via system clipboard
+nnoremap <Leader>y  "+y
+vnoremap <Leader>y  "+y
+nnoremap <Leader>yp "+p
+vnoremap <Leader>yp "+p
+
+" Copy/paste whole buffer via system clipboard
+nnoremap <Leader>yy  :%y+<CR>
+nnoremap <Leader>ypp :%d_<CR>:0put +<CR>Gdd
+
 " Clear search highlight with Enter in normal buffers only.
 " Quickfix/loclist/help windows need their own <CR> behaviour.
 augroup clear_search_cr
