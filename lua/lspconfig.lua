@@ -62,6 +62,7 @@ local function lsp_install()
     for _, name in ipairs(lspconfig._servers) do
         local cfg = server_config(name)
         if cfg and cfg.install then
+            print('[lsp] installing ' .. name .. '...')
             cfg.install()
         else
             print('[lsp] no install() defined for ' .. name)
