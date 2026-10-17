@@ -52,8 +52,14 @@ nnoremap <Leader>k :tabnext<CR>
 nnoremap <Leader>J :tabclose<CR>
 nnoremap <Leader>K :tabnew<CR>
 
-" Clear the search highlight with enter-key
-nnoremap <silent> <CR> :noh<CR><CR>
+" Clear search highlight with Enter in normal buffers only.
+" Quickfix/loclist/help windows need their own <CR> behaviour.
+augroup clear_search_cr
+    autocmd!
+    autocmd BufWinEnter * if &buftype ==# '' |
+        \ nnoremap <buffer> <silent> <CR> :noh<CR><CR> |
+        \ endif
+augroup END
 
 " Statusline configuration
 set laststatus=2
