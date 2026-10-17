@@ -129,10 +129,13 @@ local function on_cursor_moved()
         return
     end
     table.sort(diags, by_severity)
-    local d = diags[1]
-    local msg = d.message:match('[^\n]+') or d.message
-    if #msg > 79 then msg = msg:sub(1, 76) .. '...' end
-    vim.api.nvim_echo({{ msg, severity_hl[d.severity] }}, false, {})
+    local d      = diags[1]
+    local msg    = d.message:match('[^\n]+') or d.message
+    local source = d.source and (' [' .. d.source .. ']') or ''
+    local full = msg .. source
+    local max  = vim.o.columns - 1
+    if #full > max then full = full:sub(1, max - 3) .. '...' end
+    vim.api.nvim_echo({{ full, severity_hl[d.severity] }}, false, {})
 end
 
 local function setup_diagnostics(augroup)
