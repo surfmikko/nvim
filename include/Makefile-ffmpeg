@@ -1,0 +1,23 @@
+INSTALLDIR  = $(HOME)/.local
+ARCH        = $(shell uname -m)
+FFMPEG_URL  = https://evermeet.cx/ffmpeg/get/zip
+FFPROBE_URL = https://evermeet.cx/ffmpeg/get/ffprobe/zip
+FFPLAY_URL  = https://evermeet.cx/ffmpeg/get/ffplay/zip
+
+.PHONY: info ffmpeg
+
+info:
+	@echo "make ffmpeg     install latest FFmpeg snapshot to $(INSTALLDIR)"
+
+ffmpeg:
+	@test "$(shell uname -s)" = "Darwin" \
+		|| (echo "Error: macOS only" && exit 1)
+	@test "$(ARCH)" = "arm64" \
+		|| (echo "Warning: builds from evermeet.cx are arm64/x86_64 only")
+	mkdir -p $(INSTALLDIR)/bin
+	curl -fsSL $(FFMPEG_URL)  | bsdtar -xf - -C $(INSTALLDIR)/bin ffmpeg
+	curl -fsSL $(FFPROBE_URL) | bsdtar -xf - -C $(INSTALLDIR)/bin ffprobe
+	curl -fsSL $(FFPLAY_URL)  | bsdtar -xf - -C $(INSTALLDIR)/bin ffplay
+	chmod +x $(INSTALLDIR)/bin/ffmpeg \
+	         $(INSTALLDIR)/bin/ffprobe \
+	         $(INSTALLDIR)/bin/ffplay
