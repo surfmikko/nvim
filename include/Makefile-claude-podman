@@ -1,0 +1,15 @@
+INSTALLDIR  = $(HOME)/.local
+VENVDIR     = $(INSTALLDIR)/share/claude-podman/venv
+CLAUDE_PODMAN_URL = git+https://github.com/surfmikko/claude-podman
+
+.PHONY: info claude-podman
+
+info:
+	@echo "make claude-podman  install claude-podman to $(INSTALLDIR)"
+
+claude-podman:
+	python3 -m venv $(VENVDIR)
+	$(VENVDIR)/bin/pip install --upgrade pip
+	$(VENVDIR)/bin/pip install $(CLAUDE_PODMAN_URL)
+	mkdir -p $(INSTALLDIR)/bin
+	ln -sf $(VENVDIR)/bin/claude-podman $(INSTALLDIR)/bin/claude-podman
