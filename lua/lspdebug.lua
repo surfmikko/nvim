@@ -118,6 +118,26 @@ local function build_report()
     add(string.format('  errors=%-4d  warnings=%-4d  hints=%-4d  info=%-4d',
         dc[1], dc[2], dc[4], dc[3]))
 
+    -- Server capabilities (formatting)
+    add('')
+    add('Server capabilities')
+    if #clients == 0 then
+        add('  (no clients)')
+    else
+        for _, c in ipairs(clients) do
+            local sc = c.server_capabilities or {}
+            local function flag(val)
+                if val then return 'yes' else return 'no' end
+            end
+            add(string.format(
+                '  %-16s  fmt=%-3s  rangeFmt=%-3s  codeAction=%-3s',
+                c.name,
+                flag(sc.documentFormattingProvider),
+                flag(sc.documentRangeFormattingProvider),
+                flag(sc.codeActionProvider)))
+        end
+    end
+
     -- Configured servers vs running
     add('')
     add('Configured servers  (lsp/*.lua)')
