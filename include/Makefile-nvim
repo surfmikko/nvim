@@ -1,6 +1,17 @@
 INSTALLDIR = $(HOME)/.local
-ARCH       = $(shell uname -m)
-NVIM_URL   = https://github.com/neovim/neovim/releases/latest/download/nvim-macos-$(ARCH).tar.gz
+UNAME_S    = $(shell uname -s)
+UNAME_M    = $(shell uname -m)
+ifeq ($(UNAME_S),Darwin)
+    NVIM_OS = macos
+else
+    NVIM_OS = linux
+endif
+ifeq ($(UNAME_M),aarch64)
+    ARCH = arm64
+else
+    ARCH = $(UNAME_M)
+endif
+NVIM_URL   = https://github.com/neovim/neovim/releases/latest/download/nvim-$(NVIM_OS)-$(ARCH).tar.gz
 
 .PHONY: info nvim
 
